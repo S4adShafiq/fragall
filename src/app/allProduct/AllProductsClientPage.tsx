@@ -1,11 +1,23 @@
 "use client"
 import { useState, useMemo } from "react"
+import type React from "react"
+
 import Link from "next/link"
 import Image from "next/image"
 import { type Product, type Category, getFullImageUrl } from "../../lib/api"
+import { useCart } from "../../lib/cart-context"
 
 const ProductCard = ({ product }: { product: Product }) => {
   const [imageLoaded, setImageLoaded] = useState(false)
+  const { dispatch } = useCart()
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault()
+    dispatch({
+      type: "ADD_ITEM",
+      payload: { product },
+    })
+  }
 
   return (
     <div
@@ -40,13 +52,16 @@ const ProductCard = ({ product }: { product: Product }) => {
 
         <div className="text-xs tracking-wider text-gray-600 uppercase mb-2 truncate">{product.title || ""}</div>
         <div className="text-black font-semibold text-sm mb-3 truncate">PKR {product.price || ""}</div>
-
-        <div className="mt-auto pt-3">
-          <button className="w-full text-xs border border-black px-4 py-2 transition-colors duration-200 bg-white hover:bg-black hover:text-white">
-            ADD TO BAG
-          </button>
-        </div>
       </Link>
+
+      <div className="mt-auto pt-3">
+        <button
+          onClick={handleAddToCart}
+          className="w-full text-xs border border-black px-4 py-2 transition-colors duration-200 bg-white hover:bg-black hover:text-white"
+        >
+          ADD TO BAG
+        </button>
+      </div>
     </div>
   )
 }

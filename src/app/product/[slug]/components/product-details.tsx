@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import type { Product, Size } from "../../../../lib/api"
+import { useCart } from "../../../../lib/cart-context"
 
 interface ProductDetailsProps {
   product: Product
@@ -9,6 +10,17 @@ interface ProductDetailsProps {
 
 export default function ProductDetails({ product }: ProductDetailsProps) {
   const [selectedSize, setSelectedSize] = useState<Size | null>(product.size?.length ? product.size[0] : null)
+  const { dispatch } = useCart()
+
+  const handleAddToCart = () => {
+    dispatch({
+      type: "ADD_ITEM",
+      payload: {
+        product,
+        selectedSize: selectedSize?.size,
+      },
+    })
+  }
 
   return (
     <div className="space-y-3 md:space-y-5">
@@ -49,7 +61,11 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
         </div>
       )}
 
-      <button className="w-1/2 border border-black py-2 text-xs font-semibold uppercase transition-colors duration-200 hover:bg-black hover:text-white">
+      <button
+        onClick={handleAddToCart}
+        disabled={!product.isavailable}
+        className="w-1/2 border border-black py-2 text-xs font-semibold uppercase transition-colors duration-200 hover:bg-black hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+      >
         Add to Bag
       </button>
 

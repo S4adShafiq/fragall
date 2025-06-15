@@ -1,5 +1,5 @@
 // Centralized API configuration and functions
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://passionate-cherry-2410795bbd.strapiapp.com"
 
 export interface Size {
   id: number
